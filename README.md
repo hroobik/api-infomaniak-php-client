@@ -3,7 +3,7 @@
 ![ideative's logo](./assets/IdeativeLogo.png)
 
 
-#Infomaniak API Client 
+# Infomaniak API Client 
 Fork by Ideative
 
 
