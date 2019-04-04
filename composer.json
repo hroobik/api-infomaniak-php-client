@@ -1,10 +1,10 @@
 {
-  "name": "infomaniak/api-php-client",
+  "name": "ideative/api-infomaniak-php-client",
   "description": "A PHP client library for accessing Infomaniak APIs.",
   "authors": [
     {
-      "name": "Infomaniak Network SA",
-      "email": "dev@infomaniak.ch"
+      "name": "Idéative Sarl",
+      "email": "devs@ideative.ch"
     }
   ],
   "require": {
