@@ -210,6 +210,7 @@ class ApiDescription
         $code[] = '<?php';
         $code[] = '';
         $code[] = 'namespace Infomaniak;';
+        $code[] = 'use GuzzleHttp\Command\Guzzle\GuzzleClient;';
         $code[] = '';
         $code[] = '// The current code should be copy-paste as a comment for \Infomaniak\Api Class';
         $code[] = '';
