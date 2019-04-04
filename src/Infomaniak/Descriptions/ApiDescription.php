@@ -77,17 +77,29 @@ class ApiDescription
                         array_shift($explodedUrl);
                         array_shift($explodedUrl);
 
+                        $withID = false;
+                        $previousKey = false;
                         foreach ($explodedUrl as $key => $value) {
                             $explodedUrl[$key] = ucfirst($explodedUrl[$key]);
                             if (strpos($value, '{') !== false) {
                                 $explodedUrl[$key] = '';
                             }
-                            // Cleaning the part
-                            $explodedUrl[$key] = str_replace('-', '', ucwords($explodedUrl[$key], '-'));
-                            $explodedUrl[$key] = str_replace('_', '', ucwords($explodedUrl[$key], '_'));
+                            // There is an
+                            if ($value === '{id}') {
+                                $explodedUrl[$previousKey] .= 'Id';
+                            }
+                            if (!empty($explodedUrl)) {
+                                // Cleaning the part
+                                $explodedUrl[$key] = str_replace('-', '', ucwords($explodedUrl[$key], '-'));
+                                $explodedUrl[$key] = str_replace('_', '', ucwords($explodedUrl[$key], '_'));
+                            }
+                            $previousKey = $key;
                         }
                         // Adds the HTTP method to the API method
                         $package = array_shift($explodedUrl);
+                        if ($withID) {
+                            array_unshift($explodedUrl, 'Id');
+                        }
                         array_unshift($explodedUrl, ucwords(strtolower($config['method'])));
                         array_unshift($explodedUrl, $package);
 
@@ -98,49 +110,59 @@ class ApiDescription
                         $dataArray['operations'][$methodName]['name'] = $methodName;
 
                         // Http Method
-                        $dataArray['operations'][$methodName]['httpMethod'] = $config['method'];
+                        if (isset($config['method'])) {
+                            $dataArray['operations'][$methodName]['httpMethod'] = $config['method'];
+                        }
 
                         // URI
-                        $dataArray['operations'][$methodName]['uri'] = $config['url'];
+                        if (isset($config['url'])) {
+                            $dataArray['operations'][$methodName]['uri'] = $config['url'];
+                        }
 
                         // Small description of the method
-                        $dataArray['operations'][$methodName]['summary'] = $config['description'];
+                        if (isset($config['description'])) {
+                            $dataArray['operations'][$methodName]['summary'] = $config['description'];
+                        }
 
                         // Is this deprecated or not
-                        if ($config['deprecated']) {
+                        if (isset($config['deprecated'])) {
                             $dataArray['operations'][$methodName]['deprecated'] = true;
                         }
                         // Params expected
                         $parameters = [];
                         // Query params (send in post)
-                        foreach ($config['params'] as $param) {
-                            $name = str_replace('$', '', $param['name']);
-                            if (!empty($name)) {
-                                if (isset($param['type'])) {
-                                    $parameters[$name]['type'] = $param['type'];
-                                }
-                                $parameters[$name]['location'] = 'query';
-                                if (isset($param['description'])) {
-                                    $parameters[$name]['description'] = $param['description'];
-                                }
-                                if (isset($param['required']) && $param['required'] === true) {
-                                    $parameters[$name]['required'] = true;
+                        if (isset($config['params'])) {
+                            foreach ($config['params'] as $param) {
+                                $name = str_replace('$', '', $param['name']);
+                                if (!empty($name)) {
+                                    if (isset($param['type'])) {
+                                        $parameters[$name]['type'] = $param['type'];
+                                    }
+                                    $parameters[$name]['location'] = 'query';
+                                    if (isset($param['description'])) {
+                                        $parameters[$name]['description'] = $param['description'];
+                                    }
+                                    if (isset($param['required']) && $param['required'] === true) {
+                                        $parameters[$name]['required'] = true;
+                                    }
                                 }
                             }
                         }
                         // Uri params (send in the url as GET param)
-                        foreach ($config['url_params'] as $param) {
-                            $name = str_replace('$', '', $param['name']);
-                            if (!empty($name)) {
-                                if (isset($param['type'])) {
-                                    $parameters[$name]['type'] = $param['type'];
-                                }
-                                $parameters[$name]['location'] = 'uri';
-                                if (isset($param['description'])) {
-                                    $parameters[$name]['description'] = $param['description'];
-                                }
-                                if (isset($param['required']) && $param['required'] === true) {
-                                    $parameters[$name]['required'] = true;
+                        if (isset($config['url_params'])) {
+                            foreach ($config['url_params'] as $param) {
+                                $name = str_replace('$', '', $param['name']);
+                                if (!empty($name)) {
+                                    if (isset($param['type'])) {
+                                        $parameters[$name]['type'] = $param['type'];
+                                    }
+                                    $parameters[$name]['location'] = 'uri';
+                                    if (isset($param['description'])) {
+                                        $parameters[$name]['description'] = $param['description'];
+                                    }
+                                    if (isset($param['required']) && $param['required'] === true) {
+                                        $parameters[$name]['required'] = true;
+                                    }
                                 }
                             }
                         }

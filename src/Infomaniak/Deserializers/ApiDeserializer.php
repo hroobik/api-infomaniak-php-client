@@ -20,27 +20,27 @@ use Infomaniak\Results\ApiResult;
  * @package  Infomaniak
  * @category Deserializers
  */
-final class ApiDeserializer extends Deserializer {
+final class ApiDeserializer extends Deserializer
+{
 
-	/**
-	 * @param ResponseInterface $response
-	 * @param RequestInterface  $request
-	 * @param CommandInterface  $command
-	 *
-	 * @return Result|ResultInterface|ResponseInterface
-	 */
-	public function __invoke(ResponseInterface $response, RequestInterface $request, CommandInterface $command) {
-		$result = parent::__invoke($response, $request, $command);
-		$operation = Api::getApiOperationDescription($command->getName());
-		$model = $operation->getServiceDescription()->getModel($operation->getResponseModel());
-		$wrapper = $model->getData('wrapper');
-		if (!is_null($wrapper) && class_exists($wrapper)) {
-			return new $wrapper($result->toArray());
-		} else {
-			return new ApiResult($result->toArray());
-		}
-	}
-
-
+    /**
+     * @param ResponseInterface $response
+     * @param RequestInterface $request
+     * @param CommandInterface $command
+     *
+     * @return Result|ResultInterface|ResponseInterface
+     */
+    public function __invoke(ResponseInterface $response, RequestInterface $request, CommandInterface $command)
+    {
+        $result = parent::__invoke($response, $request, $command);
+        $operation = Api::getApiOperationDescription($command->getName());
+        $model = $operation->getServiceDescription()->getModel($operation->getResponseModel());
+        $wrapper = $model->getData('wrapper');
+        if (!is_null($wrapper) && class_exists($wrapper)) {
+            return new $wrapper($result->toArray());
+        } else {
+            return new ApiResult($result->toArray());
+        }
+    }
 }
 
