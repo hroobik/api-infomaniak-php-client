@@ -77,7 +77,7 @@ Infomaniak original client is using a different naming and only on selected meth
 methods have their name changed in the current client. 
 
 
-##Available Methods
+## Available Methods
 
  * AccountDelete(array $params) Delete an account
  * AccountDeleteInvitation(array $params) Cancel an invitation to become a member of given account
