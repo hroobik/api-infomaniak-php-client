@@ -166,6 +166,46 @@ class ApiDescription
                                 }
                             }
                         }
+                        // Capabilities (send in the url as GET param)
+                        if (isset($config['capabilities'])) {
+                            foreach ($config['capabilities'] as $capability) {
+                                switch ($capability){
+                                    case 'pagination':
+                                        $parameters['page']['type'] = 'integer';
+                                        $parameters['page']['location'] = 'query';
+                                        $parameters['per_page']['type'] = 'integer';
+                                        $parameters['per_page']['location'] = 'query';
+                                        break;
+
+                                    case 'sort':
+                                        $parameters['order_by']['type'] = 'string';
+                                        $parameters['order_by']['location'] = 'query';
+                                        $parameters['order']['type'] = 'string';
+                                        $parameters['order']['location'] = 'query';
+                                        $parameters['order_for']['type'] = 'string';
+                                        $parameters['order_for']['location'] = 'query';
+                                        break;
+
+                                    case 'offset':
+                                        $parameters['limit']['type'] = 'integer';
+                                        $parameters['limit']['location'] = 'query';
+                                        $parameters['skip']['type'] = 'integer';
+                                        $parameters['skip']['location'] = 'query';
+                                        break;
+
+                                    case 'total':
+                                        $parameters['return']['type'] = 'string';
+                                        $parameters['return']['location'] = 'query';
+                                        break;
+
+                                    default:
+                                        $name = $capability;
+                                        $parameters[$name]['type'] = 'string';
+                                        $parameters[$name]['location'] = 'query';
+                                        break;
+                                }
+                            }
+                        }
 
 
                         $dataArray['operations'][$methodName]['parameters'] = $parameters;
